@@ -1,3 +1,6 @@
+cd .dotfiles/vim/
+ln -s .vimrc ~/
+
 " NeoBundle がインストールされていない時、
 " もしくは、プラグインの初期化に失敗した時の処理
 function! s:WithoutBundles()
