@@ -14,8 +14,9 @@ NeoBundle 'Shugo/neocomplcache.git'
 " IDE
 NeoBundle 'Shugo/unite.vim.git'
 
-" ツリー表示
+"ディレクトリツリー表示
 NeoBundle 'scrooloose/nerdtree'
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
 
 " カラースキーマ
 NeoBundle 'nanotech/jellybeans.vim'
