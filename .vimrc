@@ -2,9 +2,10 @@ set nocompatible
 filetype off
 
 if has('vim_starting')
-	set rtp+=$HOME/.vim/bundle/neobundle.vim/
-endif
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
 call neobundle#begin(expand('~/.vim/bundle'))
+endif
+
 NeoBundleFetch 'Shugo/neobundle.vim'
 
 " 入力補完
@@ -86,3 +87,26 @@ endfunction
 call neobundle#end()
 
 filetype plugin indent on
+filetype indent on
+syntax on
+
+set number	"行番号
+set ruler	"ルーラー
+set title	"ターミナルのタイトルをセット
+set cursorline	"カーソル行を強調表示
+set cursorcolumn "カーソル桁強調表示
+set list	"空白文字の可視化
+autocmd BufWritePre * :%s/\s\+$//ge "保存時に行末の空白を除去
+set laststatus=2 "ステータスラインを表示するウインドウ
+set encoding=utf-8
+set listchars=eol:¬,tab:▸\
+set history=2000
+set ignorecase	"検索の大文字小文字を区別しない
+set shiftwidth=2 "自動インデント幅
+set tabstop=2	"タブ幅
+set showcmd	"コマンドをステータスラインに表示
+set showmode	"ステータスラインに現在のモードを表示
+set smartindent "新しい行を作った時に自動インデント
+set wildmenu	"補完候補の表示
+set wrap	"長い行を折り返して表示
+
