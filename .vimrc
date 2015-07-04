@@ -8,12 +8,6 @@ endif
 
 NeoBundleFetch 'Shugo/neobundle.vim'
 
-" 入力補完
-NeoBundle 'Shugo/neocomplcache.git'
-
-" IDE
-NeoBundle 'Shugo/unite.vim.git'
-
 "ディレクトリツリー表示
 NeoBundle 'scrooloose/nerdtree'
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
@@ -110,4 +104,4 @@ set showmode	"ステータスラインに現在のモードを表示
 set smartindent "新しい行を作った時に自動インデント
 set wildmenu	"補完候補の表示
 set wrap	"長い行を折り返して表示
-
+set noswapfile	"swpファイルを生成しない
