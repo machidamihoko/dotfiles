@@ -86,7 +86,6 @@ filetype indent on
 syntax on
 
 set number	"行番号
-set ruler	"ルーラー
 set title	"ターミナルのタイトルをセット
 set cursorline	"カーソル行を強調表示
 set cursorcolumn "カーソル桁強調表示
