@@ -1,3 +1,4 @@
+"NeoBundle set
 set nocompatible
 filetype off
 
@@ -6,7 +7,18 @@ if has('vim_starting')
 call neobundle#begin(expand('~/.vim/bundle'))
 endif
 
-NeoBundleFetch 'Shugo/neobundle.vim'
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+"vim IDE"
+NeoBundle 'Shougo/unite.vim'
+
+NeoBundle 'Shougo/neomru.vim'
+
+NeoBundle 'tyru/caw.vim'
+
+"自動閉じカッコ"
+NeoBundle 'cohama/lexima.vim'
+
 
 "ディレクトリツリー表示
 NeoBundle 'scrooloose/nerdtree'
@@ -52,6 +64,21 @@ function! MyFilename()
 	              \ ('' != MyModified() ? ' ' . MyModified() : '')
 endfunction
 
+" Unite.vim の設定
+" インサートモードで始める
+let g:unite_enable_start_insert=1
+" バッファ一覧
+noremap <C-P> :Unite buffer<CR>
+" ファイル一覧
+noremap <C-N> :Unite -buffer-name=file file<CR>
+" 最近使ったファイルの一覧
+noremap <C-Z> :Unite file_mru<CR>
+" esc で終了
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()
+	nmap <silent><buffer> <ESC> <Plug>(unite_exit)
+endfunction
+
 function! MyFugitive()
    try
     if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
@@ -80,6 +107,7 @@ endfunction
 
 
 call neobundle#end()
+NeoBundleCheck
 
 filetype plugin indent on
 filetype indent on
@@ -104,3 +132,11 @@ set smartindent "新しい行を作った時に自動インデント
 set wildmenu	"補完候補の表示
 set wrap	"長い行を折り返して表示
 set noswapfile	"swpファイルを生成しない
+
+" 自動閉じカッコ　文末以外では無効
+call lexima#add_rule({'at': '\%#.*[-0-9a-zA-Z_,:]', 'char': '{', 'input': '{'})
+" 自動閉じカッコ　次の行に閉じカッコがあってもタイプ出来るように
+call lexima#add_rule({'at': '\%#\n\s*}', 'char': '}', 'input': '}', 'delete': '}'})
+" <C-_>でコメントアウト"
+nmap <C-_> <Plug>(caw:i:toggle)
+vmap <C-_> <Plug>(caw:i:toggle)>
