@@ -1,3 +1,7 @@
+# $PATH
+export PATH=/usr/local/Cellar:$PATH
+export PATH=/Applications/MAMP/bin/php/php5.6.7/bin:$PATH
+
 # 環境変数
 export LANG=ja_JP.UTF-8
 
