@@ -1,9 +1,22 @@
 # $PATH
 export PATH=/usr/local/Cellar:$PATH
 export PATH=/Applications/MAMP/bin/php/php5.6.7/bin:$PATH
+export GOPATH=$HOME/dev/go
+export PATH=$PATH:$GOPATH/bin
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" ]
 
 # 環境変数
 export LANG=ja_JP.UTF-8
+export EDITOR=/usr/bin/vim
+
+#Docker設定
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.101:2376"
+export DOCKER_CERT_PATH="/Users/machidamihoko/.docker/machine/machines/dev"
+export DOCKER_MACHINE_NAME="dev"
+# Run this command to configure your shell:
+# # eval $(docker-machine env dev)
 
 # 補完機能を有効にする
 autoload -Uz compinit
@@ -84,3 +97,5 @@ setopt ignore_eof
 setopt interactive_comments
 
 # vim:set ft=zsh :
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
