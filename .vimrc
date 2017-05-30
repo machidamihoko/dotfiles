@@ -1,142 +1,147 @@
-"NeoBundle set
-set nocompatible
-filetype off
+" ---------------------------
+"" Start Neobundle Settings.
+" ---------------------------
 
+set nocompatible
 if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('~/.vim/bundle'))
+  set runtimepath+=~/.vim/bundle/neobundle.vim
 endif
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-"vim IDE"
+" ファイルをツリー表示
+NeoBundle 'scrooloose/nerdtree'
+
+" vim IDE"
 NeoBundle 'Shougo/unite.vim'
 
 NeoBundle 'Shougo/neomru.vim'
 
+" golang IDE
+NeoBundle 'fatih/vim-go'
+
+" Ruby"
+NeoBundle 'tpope/vim-rails'
+
+" 補完
+NeoBundle 'Shougo/neocomplete'
+
+" スニペット
+NeoBundle 'Shougo/neosnippet'
+
+NeoBundle 'Shougo/neosnippet-snippets'
+
+" カラースキーム
+NeoBundle 'tomasr/molokai'
+
+" ステータスライン
+NeoBundle 'itchyny/lightline.vim'
+
+" コメントアウト
 NeoBundle 'tyru/caw.vim'
 
-"自動閉じカッコ"
+" 閉じカッコ
 NeoBundle 'cohama/lexima.vim'
 
+call neobundle#end()
+filetype plugin indent on
 
-"ディレクトリツリー表示
-NeoBundle 'scrooloose/nerdtree'
-nnoremap <silent><C-e> :NERDTreeToggle<CR>
+" -------------------------
+"" End Neobundle Settings.
+" -------------------------
 
-" カラースキーマ
-NeoBundle 'nanotech/jellybeans.vim'
+"構文ハイライト
+syntax on "シンタックスハイライトを有効に
 
-" statusline
-NeoBundle 'itchyny/lightline.vim'
-let g:lightline = {
-        \ 'colorscheme': 'jellybeans',
-        \ 'mode_map': {'c': 'NORMAL'},
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
-        \ },
-        \ 'component_function': {
-        \   'modified': 'MyModified',
-        \   'readonly': 'MyReadonly',
-        \   'fugitive': 'MyFugitive',
-        \   'filename': 'MyFilename',
-        \   'fileformat': 'MyFileformat',
-        \   'filetype': 'MyFiletype',
-        \   'fileencoding': 'MyFileencoding',
-        \   'mode': 'MyMode'
-        \ }
-        \ }
+set encoding=utf-8
+set listchars=eol:¬,tab:▸\
+set history=2000
+set number       "行番号
+set ruler        "カーソルが何行目の何列目にあるか
+set title        "ターミナルのタイトルをセット
+set cursorline   "カーソル行を強調表示
+set cursorcolumn "カーソル桁強調表示
+set list         "空白文字の可視化
+set laststatus=2 "ステータスラインを表示するウインドウ
+set ignorecase   "検索の大文字小文字を区別しない
+set shiftwidth=2 "自動インデント幅
+set tabstop=2    "タブ幅
+set showcmd      "コマンドをステータスラインに表示
+set showmode     "ステータスラインに現在のモードを表示
+set smartindent  "新しい行を作った時に自動インデント
+set wildmenu     "補完候補の表示
+set wrap         "長い行を折り返して表示
+set noswapfile   "swpファイルを生成しない
+autocmd BufWritePre * :%s/\s\+$//ge "保存時に行末の空白を除去
 
-function! MyModified()
-	  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
+" 閉じカッコの設定
+" 自動閉じカッコ　文末以外では無効
+call lexima#add_rule({'at': '\%#.*[-0-9a-zA-Z_,:]', 'char': '{', 'input': '{'})
 
-function! MyReadonly()
-	    return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
-endfunction
+" 自動閉じカッコ　次の行に閉じカッコがあってもタイプ出来るように
+call lexima#add_rule({'at': '\%#\n\s*}', 'char': '}', 'input': '}', 'delete': '}'})
 
-function! MyFilename()
-	      return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-	              \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-	              \  &ft == 'unite' ? unite#get_status_string() :
-	              \  &ft == 'vimshell' ? vimshell#get_status_string() :
-	              \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-	              \ ('' != MyModified() ? ' ' . MyModified() : '')
-endfunction
+" <C-_>でコメントアウト
+nmap <C-_> <Plug>(caw:i:toggle)
+vmap <C-_> <Plug>(caw:i:toggle)>
+
+" 入力補完
+let g:neocomplete#enable_at_startup = 1
 
 " Unite.vim の設定
 " インサートモードで始める
 let g:unite_enable_start_insert=1
+
 " バッファ一覧
 noremap <C-P> :Unite buffer<CR>
+
 " ファイル一覧
 noremap <C-N> :Unite -buffer-name=file file<CR>
+
 " 最近使ったファイルの一覧
 noremap <C-Z> :Unite file_mru<CR>
+
 " esc で終了
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()
-	nmap <silent><buffer> <ESC> <Plug>(unite_exit)
+ nmap <silent><buffer> <ESC> <Plug>(unite_exit)
 endfunction
 
-function! MyFugitive()
-   try
-    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
-       return fugitive#head()
-      endif
-     catch
-     endtry
-     return ''
-endfunction
+" vim-go の設定
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
 
-function! MyFileformat()
-     return winwidth(0) > 70 ? &fileformat : ''
-endfunction
+" NERDTree の設定
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
 
-function! MyFiletype()
-     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-endfunction
+" ステータスラインの設定
+scriptencoding utf-8
+let g:lightline = {
+	\	'colorscheme': 'wombat',
+	\	}
 
-function! MyFileencoding()
-     return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-endfunction
+" カラースキーマの設定
+let g:molokai_original = 1
+colorscheme molokai
+set t_Co=256
 
-function! MyMode()
-     return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
+" vimrcの保存時に自動再読み込み
+augroup source-vimrc
+	autocmd!
+	autocmd BufWritePost *vimrc source $MYVIMRC
+augroup END
 
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
 
-call neobundle#end()
-NeoBundleCheck
-
-filetype plugin indent on
-filetype indent on
-syntax on
-
-set number	"行番号
-set title	"ターミナルのタイトルをセット
-set cursorline	"カーソル行を強調表示
-set cursorcolumn "カーソル桁強調表示
-set list	"空白文字の可視化
-autocmd BufWritePre * :%s/\s\+$//ge "保存時に行末の空白を除去
-set laststatus=2 "ステータスラインを表示するウインドウ
-set encoding=utf-8
-set listchars=eol:¬,tab:▸\
-set history=2000
-set ignorecase	"検索の大文字小文字を区別しない
-set shiftwidth=2 "自動インデント幅
-set tabstop=2	"タブ幅
-set showcmd	"コマンドをステータスラインに表示
-set showmode	"ステータスラインに現在のモードを表示
-set smartindent "新しい行を作った時に自動インデント
-set wildmenu	"補完候補の表示
-set wrap	"長い行を折り返して表示
-set noswapfile	"swpファイルを生成しない
-
-" 自動閉じカッコ　文末以外では無効
-call lexima#add_rule({'at': '\%#.*[-0-9a-zA-Z_,:]', 'char': '{', 'input': '{'})
-" 自動閉じカッコ　次の行に閉じカッコがあってもタイプ出来るように
-call lexima#add_rule({'at': '\%#\n\s*}', 'char': '}', 'input': '}', 'delete': '}'})
-" <C-_>でコメントアウト"
-nmap <C-_> <Plug>(caw:i:toggle)
-vmap <C-_> <Plug>(caw:i:toggle)>
+" PHP関係
+" .ctpはPHP扱いで
+autocmd BufNewFile,BufRead *.ctp set filetype=php
+" phpはHTMLのシンタックスも有効
+let php_htmlInStrings=1
