@@ -18,6 +18,15 @@ NeoBundle 'Shougo/unite.vim'
 
 NeoBundle 'Shougo/neomru.vim'
 
+" gitの+-を表示
+NeoBundle 'airblade/vim-gitgutter'
+
+" インデントライン
+NeoBundle 'Yggdroot/indentLine'
+
+" 終了タグをハイライト
+NeoBundle 'Valloric/MatchTagAlways'
+
 " golang IDE
 NeoBundle 'fatih/vim-go'
 
@@ -33,7 +42,7 @@ NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 
 " カラースキーム
-NeoBundle 'tomasr/molokai'
+NeoBundle 'morhetz/gruvbox'
 
 " ステータスライン
 NeoBundle 'itchyny/lightline.vim'
@@ -73,7 +82,13 @@ set smartindent  "新しい行を作った時に自動インデント
 set wildmenu     "補完候補の表示
 set wrap         "長い行を折り返して表示
 set noswapfile   "swpファイルを生成しない
-autocmd BufWritePre * :%s/\s\+$//ge "保存時に行末の空白を除去
+" autocmd BufWritePre * :%s/\s\+$//ge "保存時に行末の空白を除去
+
+" 最後のカーソル位置を復元する
+augroup vimrcEx
+	au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+		\ exe "normal g`\"" | endif
+augroup END
 
 " 閉じカッコの設定
 " 自動閉じカッコ　文末以外では無効
@@ -102,6 +117,10 @@ noremap <C-N> :Unite -buffer-name=file file<CR>
 " 最近使ったファイルの一覧
 noremap <C-Z> :Unite file_mru<CR>
 
+" ウィンドウを分割して開く
+au FileType unite nnoremap <silent> <buffer> <expr> <C-O> unite#do_action('split')
+au FileType unite inoremap <silent> <buffer> <expr> <C-O> unite#do_action('split')
+
 " esc で終了
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()
@@ -123,9 +142,40 @@ let g:lightline = {
 	\	}
 
 " カラースキーマの設定
-let g:molokai_original = 1
-colorscheme molokai
 set t_Co=256
+set background=dark "ダークモード
+colorscheme gruvbox
+
+" インデントラインをデフォルト表示
+let g:indentLine_color_term = 111
+let g:indentLine_color_gui = '#708090'
+set list listchars=tab:\┆\ 
+let g:indentLine_char = '┆' "use ¦, ┆ or │
+
+"MatchTagAlwaysのオプション機能ONにする
+let g:mta_use_matchparen_group = 1
+
+"MatchTagAlwaysを使用するファイルタイプ
+let g:mta_filetypes = {
+			\ 'html' : 1,
+			\ 'xhtml' : 1,
+			\ 'xml' : 1,
+			\ 'jinja' : 1,
+			\ 'php' : 1,
+			\ 'ctp' : 1,
+			\}
+
+" ctp をphp扱いに　htmlのシンタックスも有効に
+autocmd BufNewFile,BufRead *.ctp set filetype=php
+let php_htmlInStrings=1
+
+" htmlの閉じタグ自動補完
+augroup MyXML
+	autocmd!
+	autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+	autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+	autocmd Filetype php inoremap <buffer> </ </<C-x><C-o>
+augroup END
 
 " vimrcの保存時に自動再読み込み
 augroup source-vimrc
@@ -139,9 +189,3 @@ imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)"
 \: "\<TAB>"
-
-" PHP関係
-" .ctpはPHP扱いで
-autocmd BufNewFile,BufRead *.ctp set filetype=php
-" phpはHTMLのシンタックスも有効
-let php_htmlInStrings=1
