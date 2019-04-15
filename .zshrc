@@ -1,6 +1,6 @@
 # $PATH
 export PATH=/usr/local/Cellar:$PATH
-export PATH=/Applications/MAMP/bin/php/php5.6.7/bin:$PATH
+export PATH=/Applications/MAMP/bin/php/php5.6.30/bin:$PATH
 export GOPATH=$HOME/dev/go
 export PATH=$PATH:$GOPATH/bin
 export NVM_DIR="$HOME/.nvm"
